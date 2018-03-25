@@ -31,6 +31,7 @@ for (row in 1:nrow(mergedData))
 
 #remove the excluded rows
 cleanedData = mergedData[-excludePlayers, ]
+write.csv(cleanedData, "basketballStatsCleaned.csv")
 
 #trim down the data selecting only necessarry columns for model
 analysisData = subset(cleanedData,select = c(bioID,GP,minutes,points,rebounds,assists,steals,blocks,
@@ -44,4 +45,3 @@ analysisData$apg <- analysisData$assists/analysisData$GP
 analysisData$spg <- analysisData$steals/analysisData$GP
 analysisData$bpg <- analysisData$blocks/analysisData$GP
 analysisData$ftpercent <- analysisData$ftMade/analysisData$ftAttempted
-
