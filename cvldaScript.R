@@ -11,7 +11,7 @@ for(i in 1:10)
   
 #perform lda on the model
 tr = data[ !(data$bioID %in% partitions[[i]]$bioID), ]
-lda.fit = lda(pos~ rpg + apg+ tpg + bpg+ftpercent, data = tr)
+lda.fit = lda(pos~ rpg+ftpercent, data = tr)
 
 #calculate train error
 lda.predTr=predict(lda.fit , tr)
