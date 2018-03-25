@@ -31,4 +31,9 @@ for (row in 1:nrow(mergedData))
 
 #remove the excluded rows
 cleanedData = mergedData[-excludePlayers, ]
+write.csv(cleanedData, "basketballStatsCleaned.csv")
+
+
+
+
 
