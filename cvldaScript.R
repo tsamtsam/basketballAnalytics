@@ -1,44 +1,58 @@
 data <- read.csv(file="basketballStatsAnalysis.csv", header=TRUE, sep=",")
 data = data[data$pos == "G" | data$pos == "F" | data$pos == "C", ]
-partitions = list(fold1, fold2, fold3, fold4, fold5, fold6, fold7, fold8, fold9, fold10)
 
-errorTest = c()
-errorTrain = c()
+#shuffle rows
+data<-data[sample(nrow(data)),]
+
+#Create 10 equally size folds
+folds <- cut(seq(1,nrow(data)),breaks=10,labels=FALSE)
+
+errorTestLda = c()
+errorTrainLda = c()
+errorTestLr = c()
+errorTrainLr = c()
+
 library(MASS)
 #perform lda leaving out 1 partition each time and calculate the error
 for(i in 1:10)
 {
   
-#perform lda on the model
-tr = data[ !(data$bioID %in% partitions[[i]]$bioID), ]
-lda.fit = lda(pos~ rpg+ftpercent, data = tr)
+testIndexes <- which(folds==i,arr.ind=TRUE)
+testData <- data[testIndexes, ]
+tr <- data[-testIndexes, ]
+
+#perform lda and logistical regression on the model
+lda.fit = lda(pos~ftpercent+rpg, data = tr)
 
 #calculate train error
 lda.predTr=predict(lda.fit , tr)
-numErrorTrain = 0
+numErrorTrainLda = 0
+
 for(j in 1:nrow(tr))
 {
   if (lda.predTr$class[j] != tr$pos[j])
   {
-    numErrorTrain = numErrorTrain + 1
+    numErrorTrainLda = numErrorTrainLda + 1
   }
 }
-cvErrorTr = numErrorTrain / nrow(tr)
-errorTrain = c(errorTrain, cvErrorTr)
+cvErrorTrLda = numErrorTrainLda / nrow(tr)
+errorTrainLda = c(errorTrainLda, cvErrorTrLda)
+
 
 #calculate test error
-lda.predTe=predict(lda.fit , partitions[[i]])
-numErrorTest = 0
-for(j in 1:nrow(partitions[[i]]))
+lda.predTe=predict(lda.fit , testData)
+numErrorTestLda = 0
+
+for(j in 1:nrow(testData))
 {
-  if (lda.predTe$class[j] != partitions[[i]]$pos[j])
+  if (lda.predTe$class[j] != testData$pos[j])
   {
-    numErrorTest = numErrorTest + 1
+    numErrorTestLda = numErrorTestLda + 1
   }
 }
-cvErrorTe = numErrorTest / nrow(partitions[[i]])
-errorTest = c(errorTest, cvErrorTe)
+cvErrorTeLda = numErrorTestLda / nrow(testData)
+errorTestLda = c(errorTestLda, cvErrorTeLda)
 }
 
-plot(errorTest, type="o", col="blue", ylim=c(0,1))
-lines(errorTrain, type="o", col="red")
+plot(errorTestLda, type="o", col="blue", ylim=c(0,1))
+lines(errorTrainLda, type="o", col="red")
