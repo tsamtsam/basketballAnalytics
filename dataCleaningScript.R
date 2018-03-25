@@ -23,7 +23,7 @@ for (row in 1:nrow(mergedData))
   {
     excludePlayers = c(excludePlayers, row)
   }
-  else if(mergedData$year[row] <= 1976)
+  else if(mergedData$year[row] <= 1990)
   {
     excludePlayers = c(excludePlayers, row)
   }
@@ -31,7 +31,6 @@ for (row in 1:nrow(mergedData))
 
 #remove the excluded rows
 cleanedData = mergedData[-excludePlayers, ]
-write.csv(cleanedData, "basketballStatsCleaned.csv")
 
 #trim down the data selecting only necessarry columns for model
 analysisData = subset(cleanedData,select = c(bioID,GP,minutes,points,rebounds,assists,steals,blocks,
@@ -44,4 +43,8 @@ analysisData$rpg <- analysisData$rebounds/analysisData$GP
 analysisData$apg <- analysisData$assists/analysisData$GP
 analysisData$spg <- analysisData$steals/analysisData$GP
 analysisData$bpg <- analysisData$blocks/analysisData$GP
+analysisData$tpg <- analysisData$threeAttempted/analysisData$GP
 analysisData$ftpercent <- analysisData$ftMade/analysisData$ftAttempted
+
+#export data frame to csv
+write.csv(analysisData, "basketballStatsAnalysis.csv")
