@@ -46,5 +46,8 @@ analysisData$bpg <- analysisData$blocks/analysisData$GP
 analysisData$tpg <- analysisData$threeAttempted/analysisData$GP
 analysisData$ftpercent <- analysisData$ftMade/analysisData$ftAttempted
 
+#remove rows with no position
+analysisData = analysisData[!(is.na(analysisData$pos)), ]
+
 #export data frame to csv
 write.csv(analysisData, "basketballStatsAnalysis.csv")
