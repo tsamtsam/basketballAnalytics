@@ -10,7 +10,7 @@ Error Rate is how often the model is wrong.
 | FT%, RPG |0.316      |      0.317 |
 | FT%, APG     |  0.366 |  0.367 |
 |  FT%, BPG     | 0.318    |   0.317|
-| FT%, APG | 0.412      |     0.415 |
+| FT%, SPG | 0.412      |     0.415 |
 | FT%, PPG, RPG | 0.276      |     0.278 |
 | FT%, PPG, APG | 0.297      |     0.299 |
 | FT%, RPG, APG | 0.225      |     0.225 |
