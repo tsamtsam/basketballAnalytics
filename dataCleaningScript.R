@@ -23,7 +23,7 @@ for (row in 1:nrow(mergedData))
   {
     excludePlayers = c(excludePlayers, row)
   }
-  else if(mergedData$year[row] <= 1990)
+  else if(mergedData$year[row] <= 1980)
   {
     excludePlayers = c(excludePlayers, row)
   }
