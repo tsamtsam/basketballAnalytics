@@ -43,11 +43,21 @@ analysisData$rpg <- analysisData$rebounds/analysisData$GP
 analysisData$apg <- analysisData$assists/analysisData$GP
 analysisData$spg <- analysisData$steals/analysisData$GP
 analysisData$bpg <- analysisData$blocks/analysisData$GP
-analysisData$tpg <- analysisData$threeAttempted/analysisData$GP
+analysisData$tpg <- analysisData$turnovers/analysisData$GP
 analysisData$ftpercent <- analysisData$ftMade/analysisData$ftAttempted
+analysisData$threepercent <- ifelse(analysisData$threeAttempted != 0,analysisData$threeMade/analysisData$threeAttempted,0)
+
 
 #remove rows with no position
 analysisData = analysisData[!(is.na(analysisData$pos)), ]
+
+#add in new columns calculating per 36 minutes stats and FT%
+analysisData$pp36 <- analysisData$points/analysisData$minutes
+analysisData$rp36 <- analysisData$rebounds/analysisData$minutes
+analysisData$ap36 <- analysisData$assists/analysisData$minutes
+analysisData$sp36 <- analysisData$steals/analysisData$minutes
+analysisData$bp36 <- analysisData$blocks/analysisData$minutes
+analysisData$tp36 <- analysisData$turnovers/analysisData$minutes
 
 #export data frame to csv
 write.csv(analysisData, "basketballStatsAnalysis.csv")

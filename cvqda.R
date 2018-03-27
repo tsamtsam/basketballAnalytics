@@ -19,7 +19,7 @@ for(i in 1:5)
   trainData <- data[-testIndexes, ]
   trainData$pos = factor(trainData$pos) #drop the mixed position
   testData$pos = factor(testData$pos) #drop the mixed position
-  qda.fit = qda(pos~ ftpercent, data = trainData)
+  qda.fit = qda(pos~  ppg + spg + bpg+rpg +apg, data = trainData)
   
   #calculate train error
   qda.predTr=predict(qda.fit , trainData)
