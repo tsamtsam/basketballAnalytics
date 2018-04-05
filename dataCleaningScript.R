@@ -22,8 +22,8 @@ for (row in 1:nrow(mergedData))
   else if(mergedData$fgAttempted[row] < 100)
   {
     excludePlayers = c(excludePlayers, row)
-  }
-  else if(mergedData$year[row] <= 1990)
+  } 
+  else if(mergedData$year[row] <= 1978) # take in at least 1979-1980 season where 3pt first began
   {
     excludePlayers = c(excludePlayers, row)
   }
@@ -33,7 +33,7 @@ for (row in 1:nrow(mergedData))
 cleanedData = mergedData[-excludePlayers, ]
 
 #trim down the data selecting only necessarry columns for model
-analysisData = subset(cleanedData,select = c(bioID,GP,minutes,points,rebounds,assists,steals,blocks,
+analysisData = subset(cleanedData,select = c(bioID,GP,year,minutes,points,rebounds,assists,steals,blocks,
                                              turnovers,PF,fgAttempted,fgMade,ftAttempted,ftMade,
                                              threeAttempted,threeMade,pos))
 
@@ -43,8 +43,22 @@ analysisData$rpg <- analysisData$rebounds/analysisData$GP
 analysisData$apg <- analysisData$assists/analysisData$GP
 analysisData$spg <- analysisData$steals/analysisData$GP
 analysisData$bpg <- analysisData$blocks/analysisData$GP
-analysisData$tpg <- analysisData$threeAttempted/analysisData$GP
-analysisData$ftpercent <- analysisData$ftMade/analysisData$ftAttempted
+analysisData$tpg <- analysisData$turnovers/analysisData$GP
+analysisData$ftpercent <- ifelse(analysisData$ftAttempted != 0,analysisData$ftMade/analysisData$ftAttempted,0)
+analysisData$threepercent <- ifelse(analysisData$threeAttempted != 0,analysisData$threeMade/analysisData$threeAttempted,0)
+
+#add in new columns calculating per 36 minutes stats and FT%
+analysisData$pp36 <- analysisData$points/analysisData$minutes
+analysisData$rp36 <- analysisData$rebounds/analysisData$minutes
+analysisData$ap36 <- analysisData$assists/analysisData$minutes
+analysisData$sp36 <- analysisData$steals/analysisData$minutes
+analysisData$bp36 <- analysisData$blocks/analysisData$minutes
+analysisData$tp36 <- analysisData$turnovers/analysisData$minutes
+
+#remove rows with no position
+analysisData = analysisData[!(is.na(analysisData$pos)), ]
+
+
 
 #export data frame to csv
 write.csv(analysisData, "basketballStatsAnalysis.csv")
